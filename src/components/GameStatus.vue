@@ -1,41 +1,41 @@
 <template>
   <div class="game-status">
     <div class="score-section">
-      <div class="score-card black-card" :class="{ active: gameState.currentPlayer === 'black' }">
+      <div class="score-card black-card" :class="{ active: props.gameState.currentPlayer === 'black' }">
         <div class="player-indicator">
           <div class="piece black-piece" />
           <span class="player-name">黒</span>
         </div>
-        <div class="score">{{ gameState.blackScore }}</div>
+        <div class="score">{{ props.gameState.blackScore }}</div>
       </div>
       
       <div class="vs-divider">VS</div>
       
-      <div class="score-card white-card" :class="{ active: gameState.currentPlayer === 'white' }">
+      <div class="score-card white-card" :class="{ active: props.gameState.currentPlayer === 'white' }">
         <div class="player-indicator">
           <div class="piece white-piece" />
           <span class="player-name">白</span>
         </div>
-        <div class="score">{{ gameState.whiteScore }}</div>
+        <div class="score">{{ props.gameState.whiteScore }}</div>
       </div>
     </div>
     
-    <div v-if="!gameState.gameOver" class="current-player">
+    <div v-if="!props.gameState.gameOver" class="current-player">
       <div class="turn-indicator">
-        <div class="piece" :class="`${gameState.currentPlayer}-piece`" />
-        <span>{{ gameState.currentPlayer === 'black' ? '黒' : '白' }}の番</span>
+        <div class="piece" :class="`${props.gameState.currentPlayer}-piece`" />
+        <span>{{ props.gameState.currentPlayer === 'black' ? '黒' : '白' }}の番</span>
       </div>
     </div>
     
-    <div v-if="gameState.gameOver" class="game-over">
+    <div v-if="props.gameState.gameOver" class="game-over">
       <div class="winner-announcement">
-        <h2 v-if="gameState.winner === 'tie'">引き分け！</h2>
+        <h2 v-if="props.gameState.winner === 'tie'">引き分け！</h2>
         <h2 v-else>
-          <div class="piece" :class="`${gameState.winner}-piece`" />
-          {{ gameState.winner === 'black' ? '黒' : '白' }}の勝利！
+          <div class="piece" :class="`${props.gameState.winner}-piece`" />
+          {{ props.gameState.winner === 'black' ? '黒' : '白' }}の勝利！
         </h2>
       </div>
-      <button class="reset-button" @click="resetGame">
+      <button class="reset-button" @click="props.resetGame">
         新しいゲーム
       </button>
     </div>
@@ -43,9 +43,14 @@
 </template>
 
 <script setup lang="ts">
-import { useOthelloGame } from '../composables/useOthelloGame'
+import type { GameState } from '../types/game'
 
-const { gameState, resetGame } = useOthelloGame()
+interface Props {
+  gameState: GameState
+  resetGame: () => void
+}
+
+const props = defineProps<Props>()
 </script>
 
 <style scoped>

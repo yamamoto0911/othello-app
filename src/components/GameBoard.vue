@@ -1,7 +1,7 @@
 <template>
   <div class="game-board">
     <div
-      v-for="(row, rowIndex) in gameState.board"
+      v-for="(row, rowIndex) in props.gameState.board"
       :key="`row-${rowIndex}`"
       class="board-row"
     >
@@ -10,7 +10,7 @@
         :key="`cell-${rowIndex}-${colIndex}`"
         class="board-cell"
         :class="{
-          'valid-move': isValidMove(rowIndex, colIndex),
+          'valid-move': props.isValidMove(rowIndex, colIndex),
           'has-piece': cell !== null
         }"
         @click="handleCellClick(rowIndex, colIndex)"
@@ -24,7 +24,7 @@
           }"
         />
         <div
-          v-else-if="isValidMove(rowIndex, colIndex)"
+          v-else-if="props.isValidMove(rowIndex, colIndex)"
           class="valid-move-indicator"
         />
       </div>
@@ -33,13 +33,19 @@
 </template>
 
 <script setup lang="ts">
-import { useOthelloGame } from '../composables/useOthelloGame'
+import type { GameState } from '../types/game'
 
-const { gameState, makeMove, isValidMove } = useOthelloGame()
+interface Props {
+  gameState: GameState
+  makeMove: (row: number, col: number) => boolean
+  isValidMove: (row: number, col: number) => boolean
+}
+
+const props = defineProps<Props>()
 
 const handleCellClick = (row: number, col: number) => {
-  if (!gameState.gameOver && isValidMove(row, col)) {
-    makeMove(row, col)
+  if (!props.gameState.gameOver && props.isValidMove(row, col)) {
+    props.makeMove(row, col)
   }
 }
 </script>

@@ -10,8 +10,15 @@
         <p class="game-subtitle">モダンなオセロゲーム</p>
       </header>
       
-      <GameStatus />
-      <GameBoard />
+      <GameStatus 
+        :gameState="gameState"
+        :resetGame="resetGame"
+      />
+      <GameBoard 
+        :gameState="gameState"
+        :makeMove="makeMove"
+        :isValidMove="isValidMove"
+      />
       
       <footer class="game-footer">
         <p>Made with ❤️ using Vue.js & TypeScript</p>
@@ -23,6 +30,9 @@
 <script setup lang="ts">
 import GameBoard from './components/GameBoard.vue'
 import GameStatus from './components/GameStatus.vue'
+import { useOthelloGame } from './composables/useOthelloGame'
+
+const { gameState, makeMove, resetGame, isValidMove } = useOthelloGame()
 </script>
 
 <style scoped>
